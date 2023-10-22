@@ -1,4 +1,4 @@
-EXECUTABLE=miniDBG
+EXECUTABLE=MiniDBG
 
 CXX = g++
 
@@ -11,17 +11,19 @@ ifeq ($(UNAME_S),Darwin)
 	CFLAGS += -I/opt/local/include
 endif
 
-$(EXECUTABLE): $(objects)
-	$(CXX) -o $@ $(objects) $(CFLAGS)
 
 objects = Main.o Basic.o Binary_Search.o Builder.o Counters.o Locate.o Read.o
 	
-all:$(objects)
+all:$(objects) $(EXECUTABLE)
 
 $(objects): %.o :%.cpp
 	$(CXX) -c $< -o $@
 
+$(EXECUTABLE): $(objects)
+	$(CXX) -o $@ $(objects) $(CFLAGS)
+
 .PHONY : clean
 
 clean:
-	rm *.o $(EXECUTABLE)
+	@if [ -f "$(EXECUTABLE)" ]; then rm -f $(EXECUTABLE); fi
+	@if [ -n "$(objects)" ]; then rm -f $(objects); fi
